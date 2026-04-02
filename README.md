@@ -37,3 +37,17 @@ This is a practical, engineering-focused learning log.
 I will share updates regularly.
 
 Thanks to https://github.com/Nottlespike for the guidance.
+
+## Sponsorship
+
+This project is supported by JetBrains.
+
+<p align="left">
+  <img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg" width="120">
+</p>
+
+I received a personal license for JetBrains All Products Pack, which I use while working on this repository.
+
+JetBrains builds some of the best developer tools in the ecosystem, and they support open-source creators.
+
+👉 https://www.jetbrains.com/
