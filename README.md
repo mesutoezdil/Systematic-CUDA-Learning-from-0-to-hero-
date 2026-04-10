@@ -1,4 +1,5 @@
 ![Supported by JetBrains](https://img.shields.io/badge/Supported%20by-JetBrains-000000?logo=jetbrains&logoColor=white)
+![Supported by Manning Publications](https://img.shields.io/badge/Supported%20by-Manning%20Publications-8B0000)
 
 # Systematic CUDA Learning
 
@@ -39,10 +40,7 @@ It covers the fundamentals:
 
 Each section is structured step by step.
 
-Each folder contains:
-- notes (clear explanations)  
-- visual summaries  
-- structured learning progression  
+Each folder contains: notes (clear explanations), visual summaries and structured learning progression.  
 
 ### CUDA/
 
@@ -58,36 +56,19 @@ Everything here is written to answer one question:
 
 > “Do I actually understand what’s happening?”
 
-## Topics (ongoing)
-
-- GPU vs CPU fundamentals  
-- Architecture vs generation  
-- Compute capability  
-- Memory bandwidth & bottlenecks  
-- Throughput vs cores vs clock speed  
-- Tensor cores & modern AI hardware  
-- CUDA basics → advanced  
-
-More coming step by step.
-
-## Long-term goal
-
-Move from:
-
-> "I can run CUDA code"
-
-to:
-
-> "I understand GPU systems and can design around them"
-
 ## Sponsorship
 
 <p align="left">
   <img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg" width="120">
 </p>
 
-This project is supported by JetBrains.
+This project is supported by JetBrains. JetBrains provides professional developer tools that I actively use for CUDA development, experimentation, and documentation.
 
-JetBrains provides professional developer tools that I actively use for CUDA development, experimentation, and documentation.
+<p align="left">
+  <img src="manning.png" width="140">
+  <img src="manning.jpeg" width="98">
+</p>
 
-This sponsorship does not influence the technical content of this repo.
+This project is also supported by Manning Publishing. They provide high-quality technical books that I use to deepen my understanding of CUDA, GPU systems, and parallel computing.
+
+Special thanks to Manning Publishing for providing *CUDA for Deep Learning* (by Elliot Arledge).
