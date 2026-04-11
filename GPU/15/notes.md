@@ -1,97 +1,101 @@
 # Installing CUDA Toolkit on Linux
 
-Once your Linux env is ready, the next step is to install the CUDA Toolkit.
+This is where most people waste time.
 
-This is the point where your system becomes capable of compiling and running code on the GPU. 
+First rule:
 
-Without CUDA, your code cannot interact with the GPU in a meaningful way.
+You don’t always install CUDA.
 
-CUDA installation is not generic.
+## 1. Start with one question: what environment are you in?
 
-It must match your platform exactly.
+### If you are using a cloud GPU VM
 
-If you are using WSL, you must use the WSL-specific repository. 
+If you selected an image like:
 
-Standard Ubuntu repositories will either fail or install outdated versions that do not support modern GPU architectures.
+* Ubuntu for NVIDIA GPUs
+* any image that mentions CUDA
 
-Before installing CUDA, make sure your system can see the GPU:
+Do not install CUDA.
 
-```
+It is already installed.
+
+This is the setup you’re using.
+
+What you should do instead:
+
+```bash
 nvidia-smi
-````
-
-If this command fails, stop here and fix your GPU setup first. CUDA will not work otherwise.
-
-Use the official NVIDIA repository for WSL.
-
-Do not use `apt install nvidia-cuda-toolkit`. That package is outdated and not suitable for modern development.
-
-Run the following commands:
-
 ```
+
+```bash
+which nvcc
+nvcc --version
+```
+
+If these work, you’re done. Move on.
+
+Reinstalling CUDA here usually just breaks things.
+
+## 2. If you are on local Linux / WSL / bare metal
+
+This is the only case where you actually install CUDA.
+
+## Step 1 > Check GPU first
+
+```bash
+nvidia-smi
+```
+
+If this fails, stop.
+
+CUDA won’t fix it. Your driver setup is broken.
+
+## Step 2 > Install CUDA (WSL example)
+
+Do not use:
+
+```bash
+apt install nvidia-cuda-toolkit
+```
+
+It’s outdated.
+
+Use NVIDIA’s repo:
+
+```bash
 wget https://developer.download.nvidia.com/compute/cuda/repos/wsl-ubuntu/x86_64/cuda-keyring_1.1-1_all.deb
 sudo dpkg -i cuda-keyring_1.1-1_all.deb
 sudo apt-get update
 sudo apt-get -y install cuda-toolkit-13-2
 ```
 
-This installs CUDA Toolkit 13.2, which is aligned with modern GPU architectures.
+## Step 3 > Verify
 
-This installation includes:
-
-* CUDA compiler (nvcc)
-* CUDA runtime
-* core libraries
-
-It does not install a GPU driver.
-
-After installation, verify that CUDA is working:
-
-```
+```bash
 nvcc --version
 ```
 
-You should see output showing CUDA 13.x.
+If that works, you’re good.
 
-If the command is not found, your PATH is not configured correctly.
+---
 
-```
+## Step 4 > Fix PATH (only if needed)
+
+```bash
 export PATH=/usr/local/cuda/bin:$PATH
 ```
 
-To make this permanent, add it to your `.bashrc` or `.zshrc`.
+## What actually got installed
 
-CUDA is tightly coupled with GPU architecture.
+* `nvcc` (compiler)
+* CUDA runtime
+* core libraries
 
-Modern GPUs such as Hopper and Blackwell introduce new capabilities:
+It does NOT install GPU drivers.
 
-* FP8 execution paths
-* FP4 support (Blackwell)
-* improved scheduling and memory behavior
+## Reality check
 
-If your CUDA version does not support these features, your code will run but will not utilize the hardware efficiently.
+CUDA is tightly tied to hardware.
 
-CUDA is rarely used alone.
-
-It operates underneath systems such as:
-
-* PyTorch
-* TensorFlow
-* Triton
-* custom CUDA kernels
-
-A correct CUDA installation ensures that all these systems function properly.
-
-At this point, your system is ready.
-
-You have:
-
-* a Linux environment (WSL)
-* GPU access
-* CUDA Toolkit 13.2
-* a working CUDA compiler
-
-From here on, you can start writing and running real CUDA programs.
-
-https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_network
+If your version is too old, your code still runs, just not efficiently.
 
