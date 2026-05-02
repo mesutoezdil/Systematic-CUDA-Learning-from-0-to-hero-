@@ -1,5 +1,6 @@
 ![Supported by JetBrains](https://img.shields.io/badge/Supported%20by-JetBrains-000000?logo=jetbrains&logoColor=white)
 ![Supported by Manning Publications](https://img.shields.io/badge/Supported%20by-Manning%20Publications-8B0000)
+![Pull Shark](https://img.shields.io/badge/Pull%20Shark-x2-0075ca)
 
 # Systematic CUDA Learning
 
