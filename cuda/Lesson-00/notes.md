@@ -37,6 +37,21 @@ Every kernel launch creates a 3-level hierarchy:
 - block: a group of threads that run on the same physical processor and can share memory with each other.
 - grid: the full set of all blocks in one kernel launch. One launch, one grid.
 
+```
+Grid
++---------------------------------------------------------------------+
+|                                                                     |
+|   Block 0               Block 1               Block 2              |
+|   +---------------+     +---------------+     +---------------+    |
+|   | Thread 0      |     | Thread 0      |     | Thread 0      |    |
+|   | Thread 1      |     | Thread 1      |     | Thread 1      |    |
+|   | Thread 2      |     | Thread 2      |     | Thread 2      |    |
+|   |    ...        |     |    ...        |     |    ...        |    |
+|   +---------------+     +---------------+     +---------------+    |
+|                                                                     |
++---------------------------------------------------------------------+
+```
+
 ## `blockIdx.x` and `threadIdx.x`
 
 ```c
