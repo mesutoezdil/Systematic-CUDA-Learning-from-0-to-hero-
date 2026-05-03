@@ -1,6 +1,6 @@
 # Lesson 03: Compute Capability
 
-Compute capability is a version number that identifies the feature set and hardware limits of a GPU. It determines what instructions are available, how much shared memory each SM gets, and what the register limits are. Every CUDA feature has a minimum compute capability requirement.
+Lessons 00 through 02 introduced threads, warps, blocks, and the 1024-thread block limit. Compute capability is the version number that defines where those limits come from. It identifies the feature set and hardware boundaries of a GPU generation, and every CUDA feature has a minimum compute capability requirement.
 
 ## What the number means
 
@@ -30,15 +30,15 @@ H100 and B100 share the same per-SM threading and memory limits. Blackwell's gai
 
 ## Threads per warp
 
-Warp size is fixed at 32 across all generations. The GPU never schedules individual threads. It always schedules warps of 32 at a time. This has not changed since Fermi (CC 2.0).
+Lesson-01 introduced the warp as the group of 32 threads the GPU processes together. That number is not arbitrary — it is fixed by the hardware and encoded in the compute capability spec. The GPU never schedules individual threads. It always schedules warps of 32 at a time, and this has not changed since Fermi (CC 2.0).
 
 ## Warps and threads per SM
 
-An SM can hold up to 64 active warps at once, which works out to 2048 threads. These limits have not changed since Pascal. More active warps give the warp scheduler more choices when some warps stall waiting on memory, which keeps the execution units busy.
+Lesson-02 introduced the SM as the physical processor that blocks run on. Each SM can hold up to 64 active warps at once, which works out to 2048 threads. More active warps give the warp scheduler more choices when some warps stall waiting on memory, which keeps the execution units busy.
 
 ## Thread block size limit
 
-The maximum thread block size is 1024 across all generations. A block must fit entirely on one SM, and the SM has a fixed register budget that caps how large one block can be. The hardware enforces this limit at runtime, not at compile time.
+Lesson-02 showed that `<<<1, 2048>>>` compiles without error but launches nothing at runtime. That silent failure happens because the max thread block size is 1024, a hard limit from the compute capability spec. A block must fit entirely on one SM, and the SM has a fixed register budget that caps how large one block can be.
 
 ## FP32 cores per SM
 
