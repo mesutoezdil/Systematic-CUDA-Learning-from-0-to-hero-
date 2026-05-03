@@ -6,7 +6,9 @@ Compute capability is a version number that identifies the feature set and hardw
 
 The format is major.minor, for example 9.0 for Hopper. A higher major version means a new architecture generation with new hardware. A higher minor version is a revision within the same generation. Code compiled for CC 7.0 runs on any GPU with CC 7.0 or higher. Code that uses features from CC 9.0 will not run on older hardware.
 
-## GPU generation comparison
+## GPU generations
+
+The table below covers data center GPUs from Pascal through Blackwell. Specs come from the NVIDIA CUDA Programming Guide, Blackwell Tuning Guide, and Hopper Tuning Guide (CUDA Toolkit 13.2, 2025-2026).
 
 | Spec                   | P100 (CC 6.0)     | V100 (CC 7.0)     | A100 (CC 8.0)     | H100 (CC 9.0)     | B100 (CC 10.0)    |
 |------------------------|-------------------|-------------------|-------------------|-------------------|-------------------|
@@ -24,21 +26,27 @@ The format is major.minor, for example 9.0 for Hopper. A higher major version me
 | FP32 Cores / SM        | 64                | 64                | 64                | 128               | 128               |
 | Shared Memory / SM     | 64 KB             | up to 96 KB       | up to 164 KB      | up to 228 KB      | up to 228 KB      |
 
-Source: NVIDIA CUDA Programming Guide, Blackwell Tuning Guide, Hopper Tuning Guide (CUDA Toolkit 13.2, 2025-2026).
+H100 and B100 share the same per-SM threading and memory limits. Blackwell's gains over Hopper are in total SM count (192 vs 132 for H100 SXM5), 5th generation Tensor Cores, HBM3e bandwidth, and NVLink 5.0, not in per-SM thread or register counts.
 
-H100 and B100 share the same basic SM threading and memory limits. Blackwell's gains over Hopper are in total SM count (192 vs 132 for H100 SXM5), 5th generation Tensor Cores, HBM3e bandwidth, and NVLink 5.0, not in per-SM thread or register counts.
+## Threads per warp
 
-## What each spec means
+Warp size is fixed at 32 across all generations. The GPU never schedules individual threads. It always schedules warps of 32 at a time. This has not changed since Fermi (CC 2.0).
 
-Threads/Warp is fixed at 32 across all generations. The GPU always processes threads in groups of 32. This constraint has not changed since Fermi (CC 2.0) and shapes how every kernel is written.
+## Warps and threads per SM
 
-Max Warps/SM and Max Threads/SM set how many threads can be alive on one SM at once. With 64 warps at 32 threads each, the cap is 2048 threads per SM. More active threads give the scheduler more work to hide memory latency.
+An SM can hold up to 64 active warps at once, which works out to 2048 threads. These limits have not changed since Pascal. More active warps give the warp scheduler more choices when some warps stall waiting on memory, which keeps the execution units busy.
 
-Max Thread Block Size stays at 1024 across all generations. A single block can never exceed 1024 threads. This comes from the SM register file: one block must fit entirely on one SM, and the SM has a fixed register budget.
+## Thread block size limit
 
-FP32 Cores/SM went from 64 (Pascal through Ampere) to 128 (Hopper and Blackwell). More FP32 cores per SM means more parallel floating-point operations per clock cycle per SM.
+The maximum thread block size is 1024 across all generations. A block must fit entirely on one SM, and the SM has a fixed register budget that caps how large one block can be. The hardware enforces this limit at runtime, not at compile time.
 
-Shared Memory/SM grew from 64 KB (Pascal) to 228 KB (Hopper and Blackwell). Shared memory is fast on-chip memory that all threads in a block can read and write. Larger shared memory lets kernels work with bigger data chunks without going to global memory.
+## FP32 cores per SM
+
+Pascal, Volta, and Ampere each have 64 FP32 cores per SM. Hopper and Blackwell have 128. More FP32 cores per SM means more floating-point operations complete per clock cycle on each SM.
+
+## Shared memory per SM
+
+Shared memory capacity grew across generations: 64 KB on Pascal, up to 96 KB on Volta, up to 164 KB on Ampere, and up to 228 KB on Hopper and Blackwell. Shared memory sits on-chip inside each SM and is accessible by all threads in a block. Larger capacity lets kernels keep bigger working sets on-chip without going to global memory.
 
 ## Visual
 
@@ -53,9 +61,9 @@ FP32/SM:   64       64       64      128       128
 Shmem/SM:  64K      96K     164K     228K      228K
 
 Specs that have NOT changed since CC 6.0:
-  - Threads per warp:    32
-  - Max warps per SM:    64
-  - Max threads per SM:  2048
+  - Threads per warp:     32
+  - Max warps per SM:     64
+  - Max threads per SM:   2048
   - Max registers per SM: 65536
   - Max thread block size: 1024
 ```
