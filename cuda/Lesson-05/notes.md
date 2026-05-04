@@ -4,7 +4,7 @@ The diagram shows the full CUDA platform as it ships with Toolkit 13.x for Black
 
 ## Programming languages
 
-CUDA C/C++ is the main language for writing kernels. It is what all previous lessons have used. OpenACC and CUDA Fortran let you add GPU support through code annotations instead of writing kernels by hand. Python reaches the GPU through libraries like CuPy and Numba. All four approaches end up running on the same GPU hardware.
+CUDA C/C++ is the main language for writing kernels. Lessons 00 through 04 all used CUDA C/C++. OpenACC and CUDA Fortran let you add GPU support through code annotations instead of writing kernels by hand. Python reaches the GPU through libraries like CuPy and Numba. All four approaches end up running on the same GPU hardware.
 
 ## Development tools
 
@@ -12,11 +12,11 @@ Nsight Systems records a timeline of what the CPU and GPU are doing. You use it 
 
 ## Compiler toolchain
 
-`nvcc` compiles `.cu` files. It sends host code to the regular C++ compiler and device code to the NVIDIA compiler. Device code first compiles to PTX, a virtual instruction set not tied to any specific GPU. The GPU driver then converts PTX to SASS, the real instructions for that GPU. Because PTX is stored in the binary, the same program can run on future GPUs without being recompiled.
+`nvcc` compiles `.cu` files. Every lesson's compile step called it directly. It sends host code to the regular C++ compiler and device code to the NVIDIA compiler. Device code first compiles to PTX, a virtual instruction set not tied to any specific GPU. The GPU driver then converts PTX to SASS, the real instructions for that GPU. Because PTX is stored in the binary, the same program can run on future GPUs without being recompiled.
 
 ## Hardware capabilities
 
-Tensor Cores are hardware units inside each SM built for matrix math. They run FP16 and FP8 matrix multiplications much faster than regular FP32 cores. MIG splits one GPU into up to seven independent partitions, each acting like a separate GPU. Dynamic Parallelism lets a running kernel launch another kernel from the GPU without going back to the CPU. GPU Direct lets GPUs send data to each other or to a network card directly, without going through system memory.
+Tensor Cores are hardware units inside each SM built for matrix math. Lesson 02 introduced the SM as the physical processor blocks run on. Lesson 03 listed FP32 core counts per SM across GPU generations; Tensor Cores are separate units added on top of those for matrix operations, and they are much faster for FP16 and FP8 work. MIG splits one GPU into up to seven independent partitions, each acting like a separate GPU. Dynamic Parallelism lets a running kernel launch another kernel from the GPU without going back to the CPU. Lesson 00 launched kernels from the CPU; Dynamic Parallelism moves that step to the GPU itself. GPU Direct lets GPUs send data to each other or to a network card directly, without going through system memory.
 
 ## AI framework layer
 
